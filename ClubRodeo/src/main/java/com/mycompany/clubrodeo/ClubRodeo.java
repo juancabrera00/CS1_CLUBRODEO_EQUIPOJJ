@@ -35,8 +35,8 @@ public class ClubRodeo {
                     String name = JOptionPane.showInputDialog("Ingrese el nombre del socio:");
                     String typeSubscription = JOptionPane.showInputDialog("Ingrese el tipo de suscripción (VIP o Regular):");
 
-                    Partner member = new Partner(id, name, typeSubscription);
-                    if (club.addMember(member)) {
+                    Partner member = new Partner(id, name, typeSubscription); // Crear un nuevo objeto Partner (socio) con los datos ingresados
+                    if (club.addMember(member)) { // Intentar agregar el nuevo socio al club
                         JOptionPane.showMessageDialog(null, "Socio afiliado con éxito: " + name);
                     } else {
                         JOptionPane.showMessageDialog(null, "No se pudo afiliar al socio: " + name);
@@ -47,16 +47,16 @@ public class ClubRodeo {
                     String memberId = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
                     boolean memberExists = false;
 
-                    for (int i = 0; i < club.getMembers().size(); i++) {
-                        if (club.getMembers().get(i).getId().equals(memberId)) {
+                    for (int i = 0; i < club.getMembers().size(); i++) { // Iterar sobre la lista de miembros para encontrar al socio con la cédula ingresada
+                        if (club.getMembers().get(i).getId().equals(memberId)) { // Verificar si el ID del socio coincide con el ID ingresado
                             memberExists = true;
 
                             String authorizedPersonId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
                             String authorizedPersonName = JOptionPane.showInputDialog("Ingrese el nombre de la persona autorizada:");
 
-                            AuthorizedPerson authorizedPerson = new AuthorizedPerson(authorizedPersonId, authorizedPersonName);
+                            AuthorizedPerson authorizedPerson = new AuthorizedPerson(authorizedPersonId, authorizedPersonName); // Crear un nuevo objeto AuthorizedPerson (persona autorizada)
 
-                            club.getMembers().get(i).addAuthorizedPerson(authorizedPerson);
+                            club.getMembers().get(i).addAuthorizedPerson(authorizedPerson); // Agregar la persona autorizada al socio correspondiente
 
                             break;
                         }
