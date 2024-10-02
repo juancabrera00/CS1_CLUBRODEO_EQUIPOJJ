@@ -12,16 +12,16 @@ import javax.swing.JOptionPane;
  * @author jcabrera
  */
 public class Club {
-    private ArrayList<Partner> members;
+    private ArrayList<Partner> members; // Lista para almacenar los socios del club
     
     public Club() {
-        members = new ArrayList<>();
+        members = new ArrayList<>();// Inicializar la lista de socios
     }
     
-    public boolean existMember(String id) {
+    public boolean existMember(String id) { // Método para verificar si un socio ya existe en el club
         for (int i = 0; i < members.size(); i++) {
-            Partner m = members.get(i);
-            if (m.getId().equals(id)) {
+            Partner m = members.get(i); // Obtener el socio en la posición i
+            if (m.getId().equals(id)) { // Comparar el ID del socio con el ID proporcionado
                 return true;
             }
         }
@@ -34,7 +34,7 @@ public class Club {
             return false;
         }
         
-        for (int i = 0; i < members.size(); i++) {
+        for (int i = 0; i < members.size(); i++) { // Verificar si ya existe un socio con el mismo ID
             if (members.get(i).getId().equals(m.getId())) {
                 JOptionPane.showMessageDialog(null, "Ya existe un socio con esa cedula");
                 return false;
@@ -42,22 +42,22 @@ public class Club {
         }
 
         int vipCount = 0;
-        for (Partner i : members) {
+        for (Partner i : members) { // Contar cuántos socios VIP ya existen en el club
             if (i.getTypeSubscription().equals("VIP")) {
                 vipCount++;
             }
         }
         
-        if (m.getTypeSubscription().equals("VIP") && vipCount >= 3) {
+        if (m.getTypeSubscription().equals("VIP") && vipCount >= 3) { // Verificar si se intenta agregar un socio VIP y ya hay 3 socios VIP
             JOptionPane.showMessageDialog(null,"No se pueden agregar mas de 3 socios VIP");
             return false;
         }
         
-        members.add(m);
+        members.add(m); //Agregar el nuevo socio a la lista
         return true;
     }
-    
-    public ArrayList<Partner> getMembers() {
+     
+    public ArrayList<Partner> getMembers() { // Método para obtener la lista de socios
         return members;
     }
 }
