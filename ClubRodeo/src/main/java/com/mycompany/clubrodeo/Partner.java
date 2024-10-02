@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class Partner extends Person{
     private double funds;
     private String typeSubscription;
-    private ArrayList<AuthorizedPerson> Peopleauthorized;
+    private ArrayList<AuthorizedPerson> Peopleauthorized; // Lista de personas autorizadas por el socio
 
     public Partner(String id, String name, String typeSubscription) {
         super(id,name);
@@ -25,7 +25,7 @@ public class Partner extends Person{
             this.funds = 50000;
         }
         
-        this.Peopleauthorized = new ArrayList<>();
+        this.Peopleauthorized = new ArrayList<>();// Inicializar la lista de personas autorizadas
     }
     
     /**
@@ -70,4 +70,4 @@ public class Partner extends Person{
     public ArrayList<AuthorizedPerson> getPersonAuthorized(){
         return Peopleauthorized;
     }
-}
+} 
