@@ -78,5 +78,3 @@ public class ClubRodeo {
         } while (option != 3);
     }
 }
-
-        
