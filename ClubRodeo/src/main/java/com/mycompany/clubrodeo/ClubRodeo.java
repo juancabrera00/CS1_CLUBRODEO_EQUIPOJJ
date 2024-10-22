@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 
-public class ClubRodeo {
+ public class ClubRodeo {
 
     public static void main(String[] args) {
         Club club = new Club();
@@ -28,7 +28,13 @@ public class ClubRodeo {
 
             switch (option) {
                 case 1:
-                    String id = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    String id;
+                    do {
+                        id = JOptionPane.showInputDialog("Ingrese la cédula del socio (solo números):");
+                        if (!id.matches("\\d+")) { // Verifica que solo contenga dígitos
+                            JOptionPane.showMessageDialog(null, "Cédula inválida. Ingrese solo números.");
+                        }
+                    } while (!id.matches("\\d+")); // Repite mientras no se ingresen solo números
 
                     if (club.existMember(id)) {
                         JOptionPane.showMessageDialog(null, "Ya existe un socio con la cédula " + id + ". No se puede registrar nuevamente.");
@@ -47,14 +53,28 @@ public class ClubRodeo {
                     break;
 
                 case 2:
-                    String memberId = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    String memberId;
+                    do {
+                        memberId = JOptionPane.showInputDialog("Ingrese la cédula del socio (solo números):");
+                        if (!memberId.matches("\\d+")) {
+                            JOptionPane.showMessageDialog(null, "Cédula inválida. Ingrese solo números.");
+                        }
+                    } while (!memberId.matches("\\d+"));
+
                     boolean memberExists = false;
 
                     for (int i = 0; i < club.getMembers().size(); i++) {
                         if (club.getMembers().get(i).getId().equals(memberId)) {
                             memberExists = true;
 
-                            String authorizedPersonId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
+                            String authorizedPersonId;
+                            do {
+                                authorizedPersonId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada (solo números):");
+                                if (!authorizedPersonId.matches("\\d+")) {
+                                    JOptionPane.showMessageDialog(null, "Cédula inválida. Ingrese solo números.");
+                                }
+                            } while (!authorizedPersonId.matches("\\d+"));
+
                             String authorizedPersonName = JOptionPane.showInputDialog("Ingrese el nombre de la persona autorizada:");
 
                             AuthorizedPerson authorizedPerson = new AuthorizedPerson(authorizedPersonId, authorizedPersonName);
@@ -65,13 +85,13 @@ public class ClubRodeo {
                         }
                     }
 
-                    if (memberExists == false) 
+                    if (!memberExists) {
                         JOptionPane.showMessageDialog(null, "No existe un socio con la cédula proporcionada.");
+                    }
 
                     break;
 
                 case 3:
-                    // Nueva opción para ver los socios agregados
                     List<Partner> members = club.getMembers();
                     if (members.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "No hay socios registrados.");
@@ -84,7 +104,7 @@ public class ClubRodeo {
                         JOptionPane.showMessageDialog(null, memberList.toString());
                     }
                     break;
-                    
+
                 case 4:
                     JOptionPane.showMessageDialog(null, "Saliendo del sistema.");
                     break;
