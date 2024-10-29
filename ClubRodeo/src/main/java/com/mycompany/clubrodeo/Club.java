@@ -28,6 +28,15 @@ public class Club {
         return false;
     }
     
+    public Partner findMemberById(String id) {
+        for (Partner m : members) {
+            if (m.getId().equals(id)) {
+                return m;
+            }
+        }
+        return null;
+    }
+    
     public boolean addMember(Partner m) {
         if (members.size() >= 35) {
             JOptionPane.showMessageDialog(null,"El club ya alcanzo el limite de 35 socios");
@@ -59,5 +68,35 @@ public class Club {
      
     public ArrayList<Partner> getMembers() { // Método para obtener la lista de socios
         return members;
+    }
+    
+    public boolean addInvoiceToMember(String memberId, String concept, double value) {
+        Partner member = findMemberById(memberId);
+        if (member != null) {
+            return member.registerConsumption(concept, value);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un socio con la cédula " + memberId);
+            return false;
+        }
+    }
+    
+    public boolean payMemberInvoice(String memberId, Invoice invoice) {
+        Partner member = findMemberById(memberId);
+        if (member != null) {
+            return member.payInvoice(invoice);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un socio con la cédula " + memberId);
+            return false;
+        }
+    }
+    
+    public boolean increaseMemberFunds(String memberId, double amount) {
+        Partner member = findMemberById(memberId);
+        if (member != null) {
+            return member.increaseFunds(amount);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un socio con la cédula " + memberId);
+            return false;
+        }
     }
 }

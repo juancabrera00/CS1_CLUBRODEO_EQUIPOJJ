@@ -77,8 +77,8 @@ public class Invoice {
         this.paid = paid;
     }
     
-    public void pagarFactura(double fondos) {
-        if (fondos >= value) {
+    public void pagarFactura(double funds) {
+        if (funds >= value) {
             this.paid = true;
         }
     }
