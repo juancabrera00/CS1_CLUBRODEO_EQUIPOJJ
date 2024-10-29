@@ -22,11 +22,12 @@ public class ClubRodeo {
                         + "1. Afiliar un socio\n"
                         + "2. Registrar una persona autorizada por un socio\n"
                         + "3. Registrar consumo para un socio\n"
-                        + "4. Pagar factura de un socio\n"
-                        + "5. Aumentar fondos de un socio\n"
-                        + "6. Eliminar un socio\n"
-                        + "7. Mostrar todos los datos\n"
-                        + "8. Salir";
+                        + "4. Registrar consumo de persona autorizada\n"
+                        + "5. Pagar factura de un socio\n"
+                        + "6. Aumentar fondos de un socio\n"
+                        + "7. Eliminar un socio\n"
+                        + "8. Mostrar todos los datos\n"
+                        + "9. Salir";
             option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 
             switch (option) {
@@ -80,8 +81,16 @@ public class ClubRodeo {
 
                     club.addInvoiceToMember(memberIdForConsumption, concept, value);
                     break;
-
+                    
                 case 4:
+                    String memberId = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    String authorizedId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
+                    String concept = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
+                    double value = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
+                    club.addAuthorizedConsumption(memberId, authorizedId, concept, value);
+                    break;
+
+                case 5: 
                     String memberIdForInvoicePayment = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
                     Partner memberForInvoice = club.findMemberById(memberIdForInvoicePayment);
 
@@ -96,22 +105,23 @@ public class ClubRodeo {
                     }
                     break;
 
-                case 5:
+                case 6:
                     String memberIdForFunds = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
                     double amount = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la cantidad a aumentar:"));
 
                     club.increaseMemberFunds(memberIdForFunds, amount);
                     break;
                     
-                case 6:
+                    
+                case 7:
                     String idToRemove = JOptionPane.showInputDialog("Ingrese la cedula del socio a eliminar:");
                         club.removeMember(idToRemove);
                     break;
                     
-                case 7:
+                case 8:
                     club.showInformation();
                 
-                case 8:
+                case 9:
                     JOptionPane.showMessageDialog(null, "Saliendo del sistema.");
                     break;
 
