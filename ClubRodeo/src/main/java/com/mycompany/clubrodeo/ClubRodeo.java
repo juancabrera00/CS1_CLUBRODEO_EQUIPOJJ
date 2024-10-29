@@ -3,6 +3,7 @@
  */
 
 package com.mycompany.clubrodeo;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 
@@ -20,7 +21,10 @@ public class ClubRodeo {
             String menu = "BIENVENIDO AL CLUB RODEO\n"
                         + "1. Afiliar un socio\n"
                         + "2. Registrar una persona autorizada por un socio\n"
-                        + "3. Salir";
+                        + "3. Registrar consumo para un socio\n"
+                        + "4. Pagar factura de un socio\n"
+                        + "5. Aumentar fondos de un socio\n"
+                        + "6. Salir";
             option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 
             switch (option) {
@@ -68,6 +72,36 @@ public class ClubRodeo {
                     break;
                     
                 case 3:
+                    String memberIdForConsumption = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    String concept = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
+                    double value = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
+
+                    club.addInvoiceToMember(memberIdForConsumption, concept, value);
+                    break;
+
+                case 4:
+                    String memberIdForInvoicePayment = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    Partner memberForInvoice = club.findMemberById(memberIdForInvoicePayment);
+
+                    if (memberForInvoice != null) {
+                        ArrayList<Invoice> pendingInvoices = memberForInvoice.getPendingInvoices();
+                        if (!pendingInvoices.isEmpty()) {
+                            Invoice invoiceToPay = pendingInvoices.get(0); // Selección de la primera factura pendiente
+                            club.payMemberInvoice(memberIdForInvoicePayment, invoiceToPay);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No hay facturas pendientes para el socio.");
+                        }
+                    }
+                    break;
+
+                case 5:
+                    String memberIdForFunds = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    double amount = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la cantidad a aumentar:"));
+
+                    club.increaseMemberFunds(memberIdForFunds, amount);
+                    break;
+
+                case 6:
                     JOptionPane.showMessageDialog(null, "Saliendo del sistema.");
                     break;
 
@@ -75,6 +109,6 @@ public class ClubRodeo {
                     JOptionPane.showMessageDialog(null, "Opción no válida.");
                     break;
             }
-        } while (option != 3);
+        } while (option != 6);
     }
 }

@@ -15,7 +15,8 @@ public class Partner extends Person{
     private double funds;
     private String typeSubscription;
     private ArrayList<AuthorizedPerson> Peopleauthorized; // Lista de personas autorizadas por el socio
-
+    private ArrayList<Invoice> pendingInvoices; // Lista de facturas pendientes
+    
     public Partner(String id, String name, String typeSubscription) {
         super(id,name);
         this.typeSubscription = typeSubscription;
@@ -26,6 +27,49 @@ public class Partner extends Person{
         }
         
         this.Peopleauthorized = new ArrayList<>();// Inicializar la lista de personas autorizadas
+        this.pendingInvoices = new ArrayList<>();
+    }
+    
+    public boolean registerConsumption(String concept, double value) { // Método para registrar un consumo
+        if (this.funds >= value) {
+            Invoice invoice = new Invoice(concept, value, this.getName(), false);
+            this.pendingInvoices.add(invoice);
+            JOptionPane.showMessageDialog(null, "Consumo registrado exitosamente.");
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Fondos insuficientes para registrar el consumo.");
+            return false;
+        }
+    }
+    
+    
+    public boolean payInvoice(Invoice invoice) { // Método para pagar una factura
+        if (this.funds >= invoice.getValue() && !invoice.isPaid()) {
+            this.funds -= invoice.getValue();
+            invoice.setPaid(true);
+            this.pendingInvoices.remove(invoice);
+            JOptionPane.showMessageDialog(null, "Factura pagada exitosamente.");
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Fondos insuficientes para pagar la factura.");
+            return false;
+        }
+    }
+    
+    public boolean increaseFunds(double amount) {
+        double maxLimit = this.typeSubscription.equals("Regular") ? 1000000 : 5000000;
+        if ((this.funds + amount) <= maxLimit) {
+            this.funds += amount;
+            JOptionPane.showMessageDialog(null, "Fondos aumentados exitosamente.");
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "No se puede aumentar, el monto excede el límite permitido.");
+            return false;
+        }
+    }
+    
+    public ArrayList<Invoice> getPendingInvoices() {
+        return pendingInvoices;
     }
     
     /**
