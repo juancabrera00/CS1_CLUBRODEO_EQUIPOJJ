@@ -120,6 +120,17 @@ public class Club {
         return false;
     }
     
+    public boolean addAuthorizedConsumption(String memberId, String authorizedId, String concept, double value) {
+        Partner member = findMemberById(memberId);
+        if (member != null) {
+            return member.registerAuthorizedConsumption(authorizedId, concept, value);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un socio con la cédula " + memberId);
+            return false;
+        }
+    }
+
+    
     public void showInformation() {
         if (members.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay socios registrados en el club.");

@@ -114,4 +114,23 @@ public class Partner extends Person{
     public ArrayList<AuthorizedPerson> getPersonAuthorized(){
         return Peopleauthorized;
     }
+    
+    
+    public boolean registerAuthorizedConsumption(String authorizedId, String concept, double value) {
+        for (AuthorizedPerson person : Peopleauthorized) {
+            if (person.getId().equals(authorizedId)) {
+                if (this.funds >= value) {
+                    Invoice invoice = new Invoice(concept, value, person.getName(), false);
+                    this.pendingInvoices.add(invoice);
+                    JOptionPane.showMessageDialog(null, "Consumo registrado exitosamente para la persona autorizada: " + person.getName());
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Fondos insuficientes para registrar el consumo.");
+                    return false;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Persona autorizada no encontrada.");
+        return false;
+    }
 } 
