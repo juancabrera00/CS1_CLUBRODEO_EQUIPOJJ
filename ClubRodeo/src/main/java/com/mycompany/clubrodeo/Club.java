@@ -99,4 +99,60 @@ public class Club {
             return false;
         }
     }
+    
+    public boolean removeMember(String id) {
+        for (Partner partner : members) {
+            if (partner.getId().equals(id)) {
+                for (AuthorizedPerson authorized : partner.getPersonAuthorized()) {
+                    for (Invoice invoice : partner.getPendingInvoices()) {
+                        if (!invoice.isPaid()) {
+                            JOptionPane.showMessageDialog(null, "El socio tiene personas autorizadas con facturas pendientes. No se puede eliminar.");
+                            return false;
+                        }
+                    }
+                }
+                members.remove(partner);
+                JOptionPane.showMessageDialog(null, "Socio eliminado exitosamente.");
+                return true;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "No se encontró un socio con esa cédula.");
+        return false;
+    }
+    
+    public void showInformation() {
+        if (members.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay socios registrados en el club.");
+            return;
+        }
+
+        for (Partner partner : members) {
+            String info = "Socio ID: " + partner.getId() + "\n" +
+                          "Nombre: " + partner.getName() + "\n" +
+                          "Tipo de Suscripción: " + partner.getTypeSubscription() + "\n" +
+                          "Fondos: $" + partner.getFunds() + "\n\n" +
+                          "Personas Autorizadas:\n";
+
+            if (partner.getPersonAuthorized().isEmpty()) {
+                info += "- No hay personas autorizadas\n";
+            } else {
+                for (AuthorizedPerson authorized : partner.getPersonAuthorized()) {
+                    info += "  - ID: " + authorized.getId() + ", Nombre: " + authorized.getName() + "\n";
+                }
+            }
+
+            info += "\nFacturas Pendientes:\n";
+            if (partner.getPendingInvoices().isEmpty()) {
+                info += "- No hay facturas pendientes\n";
+            } else {
+                for (Invoice invoice : partner.getPendingInvoices()) {
+                    info += "  - Concepto: " + invoice.getConcept() +
+                            ", Valor: $" + invoice.getValue() +
+                            ", Pagada: " + (invoice.isPaid() ? "Sí" : "No") + "\n";
+                }
+            }
+
+            JOptionPane.showMessageDialog(null, info);
+        }
+    }
 }

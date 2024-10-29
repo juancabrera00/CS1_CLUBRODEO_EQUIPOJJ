@@ -24,7 +24,9 @@ public class ClubRodeo {
                         + "3. Registrar consumo para un socio\n"
                         + "4. Pagar factura de un socio\n"
                         + "5. Aumentar fondos de un socio\n"
-                        + "6. Salir";
+                        + "6. Eliminar un socio\n"
+                        + "7. Mostrar todos los datos\n"
+                        + "8. Salir";
             option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 
             switch (option) {
@@ -100,8 +102,16 @@ public class ClubRodeo {
 
                     club.increaseMemberFunds(memberIdForFunds, amount);
                     break;
-
+                    
                 case 6:
+                    String idToRemove = JOptionPane.showInputDialog("Ingrese la cedula del socio a eliminar:");
+                        club.removeMember(idToRemove);
+                    break;
+                    
+                case 7:
+                    club.showInformation();
+                
+                case 8:
                     JOptionPane.showMessageDialog(null, "Saliendo del sistema.");
                     break;
 
@@ -110,5 +120,15 @@ public class ClubRodeo {
                     break;
             }
         } while (option != 6);
+    }
+    
+    private static Partner getMemberById(Club club, String id) {
+        for (Partner member : club.getMembers()) {
+            if(member.getId().equals(id)) {
+                return member;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "No se encontro un socio con esa cedula");
+        return null;
     }
 }
