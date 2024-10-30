@@ -28,7 +28,7 @@ public class Club {
         return false;
     }
     
-    public Partner findMemberById(String id) {
+    public Partner findMemberById(String id) { // Método para buscar un socio por Id
         for (Partner m : members) {
             if (m.getId().equals(id)) {
                 return m;
@@ -37,7 +37,7 @@ public class Club {
         return null;
     }
     
-    public boolean addMember(Partner m) {
+    public boolean addMember(Partner m) { // Método para agregar un miembro
         if (members.size() >= 35) {
             JOptionPane.showMessageDialog(null,"El club ya alcanzo el limite de 35 socios");
             return false;
@@ -70,7 +70,7 @@ public class Club {
         return members;
     }
     
-    public boolean addInvoiceToMember(String memberId, String concept, double value) {
+    public boolean addInvoiceToMember(String memberId, String concept, double value) { // Método para registrar factura al socio
         Partner member = findMemberById(memberId);
         if (member != null) {
             return member.registerConsumption(concept, value);
@@ -80,8 +80,8 @@ public class Club {
         }
     }
     
-    public boolean payMemberInvoice(String memberId, Invoice invoice) {
-        Partner member = findMemberById(memberId);
+    public boolean payMemberInvoice(String memberId, Invoice invoice) { // Método para pagar una factura
+        Partner member = findMemberById(memberId); //Validacion si existe el socio
         if (member != null) {
             return member.payInvoice(invoice);
         } else {
@@ -90,7 +90,7 @@ public class Club {
         }
     }
     
-    public boolean increaseMemberFunds(String memberId, double amount) {
+    public boolean increaseMemberFunds(String memberId, double amount) { // Método para incrementar fondos
         Partner member = findMemberById(memberId);
         if (member != null) {
             return member.increaseFunds(amount);
@@ -100,7 +100,7 @@ public class Club {
         }
     }
     
-    public boolean removeMember(String id) {
+    public boolean removeMember(String id) { // Método para eliminar un socio
         for (Partner partner : members) {
             if (partner.getId().equals(id)) {
                 // Validación: El socio no debe ser de tipo VIP
@@ -123,7 +123,6 @@ public class Club {
                     }
                 }
 
-                // Si pasa todas las validaciones, eliminamos el socio
                 members.remove(partner);
                 JOptionPane.showMessageDialog(null, "Socio eliminado exitosamente.");
                 return true;
@@ -133,7 +132,7 @@ public class Club {
         return false;
     }
 
-    public boolean addAuthorizedConsumption(String memberId, String authorizedId, String concept, double value) {
+    public boolean addAuthorizedConsumption(String memberId, String authorizedId, String concept, double value) { // Método para consumo persona autorizada
         Partner member = findMemberById(memberId);
         if (member != null) {
             return member.registerAuthorizedConsumption(authorizedId, concept, value);
@@ -143,7 +142,7 @@ public class Club {
         }
     }
     
-    public void showInformation() {
+    public void showInformation() { // Método mostrar informacion del sistema
         if (members.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay socios registrados en el club.");
             return;

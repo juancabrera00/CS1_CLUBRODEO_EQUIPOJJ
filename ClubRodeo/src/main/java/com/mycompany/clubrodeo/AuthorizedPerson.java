@@ -16,7 +16,7 @@ public class AuthorizedPerson extends Person implements Consumable {
     }
 
     @Override
-    public boolean registerConsumption(String concept, double value) { // Lógica de consumo para una persona autorizada si se requiere
+    public boolean registerConsumption(String concept, double value) { // Consumo para una persona autorizada
         JOptionPane.showMessageDialog(null, "Registro de consumo para persona autorizada: " + getName());
         return true;
     }

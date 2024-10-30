@@ -64,7 +64,7 @@ public class ClubRodeo {
                     }
                     break;
 
-                case 3: // Registrar consumo
+                case 3: // Registrar consumo de socio
                     Partner memberForConsumption = findMemberById(club, JOptionPane.showInputDialog("Ingrese la cédula del socio:"));
                     if (memberForConsumption != null) {
                         String concept = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");

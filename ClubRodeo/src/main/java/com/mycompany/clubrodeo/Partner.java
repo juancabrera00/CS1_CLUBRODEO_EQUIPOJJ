@@ -89,23 +89,24 @@ public class Partner extends Person implements Payable, Consumable {
         JOptionPane.showMessageDialog(null, "Socio ID: " + getId() + "\nNombre: " + getName() + "\nTipo de Suscripción: " + typeSubscription + "\nFondos: $" + funds);
     }
     
-    public boolean increaseFunds(double amount) {
-        double maxLimit = this.typeSubscription.equals("Regular") ? 1000000 : 5000000;
-        if ((this.funds + amount) <= maxLimit) {
-            this.funds += amount;
-            JOptionPane.showMessageDialog(null, "Fondos aumentados exitosamente.");
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "No se puede aumentar, el monto excede el límite permitido.");
+    public boolean increaseFunds(double amount) { // Método para pagar incrementar fondos
+        if ("Regular".equals(this.typeSubscription) && this.funds + amount > 1000000) {
+            JOptionPane.showMessageDialog(null, "No se puede aumentar, el monto excede el límite permitido para socios regulares (1,000,000).");
+            return false;
+        } else if ("VIP".equals(this.typeSubscription) && this.funds + amount > 5000000) {
+            JOptionPane.showMessageDialog(null, "No se puede aumentar, el monto excede el límite permitido para socios VIP (5,000,000).");
             return false;
         }
+        this.funds += amount;
+        JOptionPane.showMessageDialog(null, "Fondos aumentados exitosamente.");
+        return true;
     }
     
     public ArrayList<Invoice> getPendingInvoices() {
         return pendingInvoices;
     }
     
-    public boolean addAuthorizedPerson(AuthorizedPerson person) {
+    public boolean addAuthorizedPerson(AuthorizedPerson person) { // Método para autorizar una persona
         if(Peopleauthorized.size() < 10) {
             Peopleauthorized.add(person);
             JOptionPane.showMessageDialog(null, "Persona autorizada agregada con exito");
@@ -120,7 +121,7 @@ public class Partner extends Person implements Payable, Consumable {
         return Peopleauthorized;
     }
     
-    public boolean registerAuthorizedConsumption(String authorizedId, String concept, double value) {
+    public boolean registerAuthorizedConsumption(String authorizedId, String concept, double value) { // Método para consumo persona autorizada
         for (AuthorizedPerson person : Peopleauthorized) {
             if (person.getId().equals(authorizedId)) {
                 if (this.funds >= value) {
