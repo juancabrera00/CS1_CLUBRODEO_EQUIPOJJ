@@ -31,7 +31,7 @@ public class ClubRodeo {
             option = Integer.parseInt(JOptionPane.showInputDialog(menu));
 
             switch (option) {
-                case 1:
+                case 1: // Afiliar socio
                     String id;
                     do {
                         id = JOptionPane.showInputDialog("Ingrese la cédula del socio (solo números):");
@@ -45,86 +45,75 @@ public class ClubRodeo {
                     String name = JOptionPane.showInputDialog("Ingrese el nombre del socio:");
                     String typeSubscription = JOptionPane.showInputDialog("Ingrese el tipo de suscripción (VIP o Regular):");
 
-                    Partner member = new Partner(id, name, typeSubscription); // Crear un nuevo objeto Partner (socio) con los datos ingresados
-                    if (club.addMember(member)) { // Intentar agregar el nuevo socio al club
+                    Partner member = new Partner(id, name, typeSubscription);
+                    if (club.addMember(member)) {
                         JOptionPane.showMessageDialog(null, "Socio afiliado con éxito: " + name);
                     } else {
                         JOptionPane.showMessageDialog(null, "No se pudo afiliar al socio: " + name);
                     }
                     break;
 
-                case 2:
-                    String memberId = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
-                    boolean memberExists = false;
+                case 2: // Agregar persona autorizada
+                    Partner memberForAuthorized = findMemberById(club, JOptionPane.showInputDialog("Ingrese la cédula del socio:"));
+                    if (memberForAuthorized != null) {
+                        String authorizedPersonId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
+                        String authorizedPersonName = JOptionPane.showInputDialog("Ingrese el nombre de la persona autorizada:");
 
-                    for (int i = 0; i < club.getMembers().size(); i++) { // Iterar sobre la lista de miembros para encontrar al socio con la cédula ingresada
-                        if (club.getMembers().get(i).getId().equals(memberId)) { // Verificar si el ID del socio coincide con el ID ingresado
-                            memberExists = true;
-
-                            String authorizedPersonId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
-                            String authorizedPersonName = JOptionPane.showInputDialog("Ingrese el nombre de la persona autorizada:");
-
-                            AuthorizedPerson authorizedPerson = new AuthorizedPerson(authorizedPersonId, authorizedPersonName); // Crear un nuevo objeto AuthorizedPerson (persona autorizada)
-
-                            club.getMembers().get(i).addAuthorizedPerson(authorizedPerson); // Agregar la persona autorizada al socio correspondiente
-
-                            break;
-                        }
+                        AuthorizedPerson authorizedPerson = new AuthorizedPerson(authorizedPersonId, authorizedPersonName);
+                        memberForAuthorized.addAuthorizedPerson(authorizedPerson);
                     }
-
-                    if (memberExists == false) 
-                        JOptionPane.showMessageDialog(null, "No existe un socio con la cédula proporcionada.");
-
-                    break;
-                    
-                case 3:
-                    String memberIdForConsumption = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
-                    String concept = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
-                    double value = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
-
-                    club.addInvoiceToMember(memberIdForConsumption, concept, value);
-                    break;
-                    
-                case 4:
-                    String memberIdForAuthorizedConsumption = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
-                    String authorizedId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
-                    String conceptForAuthorizedConsumption = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
-                    double valueForAuthorizedConsumption = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
-                    club.addAuthorizedConsumption(memberIdForAuthorizedConsumption, authorizedId, conceptForAuthorizedConsumption, valueForAuthorizedConsumption);
                     break;
 
-                case 5: 
-                    String memberIdForInvoicePayment = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
-                    Partner memberForInvoice = club.findMemberById(memberIdForInvoicePayment);
+                case 3: // Registrar consumo
+                    Partner memberForConsumption = findMemberById(club, JOptionPane.showInputDialog("Ingrese la cédula del socio:"));
+                    if (memberForConsumption != null) {
+                        String concept = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
+                        double value = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
+                        club.addInvoiceToMember(memberForConsumption.getId(), concept, value);
+                    }
+                    break;
 
+                case 4: // Registrar consumo de persona autorizada
+                    Partner memberForAuthConsumption = findMemberById(club, JOptionPane.showInputDialog("Ingrese la cédula del socio:"));
+                    if (memberForAuthConsumption != null) {
+                        String authorizedId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
+                        String conceptAuthConsumption = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
+                        double valueAuthConsumption = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
+                        club.addAuthorizedConsumption(memberForAuthConsumption.getId(), authorizedId, conceptAuthConsumption, valueAuthConsumption);
+                    }
+                    break;
+
+                case 5: // Pagar factura
+                    Partner memberForInvoice = findMemberById(club, JOptionPane.showInputDialog("Ingrese la cédula del socio:"));
                     if (memberForInvoice != null) {
                         ArrayList<Invoice> pendingInvoices = memberForInvoice.getPendingInvoices();
                         if (!pendingInvoices.isEmpty()) {
                             Invoice invoiceToPay = pendingInvoices.get(0); // Selección de la primera factura pendiente
-                            club.payMemberInvoice(memberIdForInvoicePayment, invoiceToPay);
+                            club.payMemberInvoice(memberForInvoice.getId(), invoiceToPay);
                         } else {
                             JOptionPane.showMessageDialog(null, "No hay facturas pendientes para el socio.");
                         }
                     }
                     break;
 
-                case 6:
-                    String memberIdForFunds = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
-                    double amount = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la cantidad a aumentar:"));
+                case 6: // Aumentar fondos
+                    Partner memberForFunds = findMemberById(club, JOptionPane.showInputDialog("Ingrese la cédula del socio:"));
+                    if (memberForFunds != null) {
+                        double amount = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la cantidad a aumentar:"));
+                        club.increaseMemberFunds(memberForFunds.getId(), amount);
+                    }
+                    break;
 
-                    club.increaseMemberFunds(memberIdForFunds, amount);
+                case 7: // Eliminar socio
+                    String idToRemove = JOptionPane.showInputDialog("Ingrese la cédula del socio a eliminar:");
+                    club.removeMember(idToRemove);
                     break;
-                    
-                    
-                case 7:
-                    String idToRemove = JOptionPane.showInputDialog("Ingrese la cedula del socio a eliminar:");
-                        club.removeMember(idToRemove);
-                    break;
-                    
-                case 8:
+
+                case 8: // Mostrar información
                     club.showInformation();
-                
-                case 9:
+                    break;
+
+                case 9: // Salida del sistema
                     JOptionPane.showMessageDialog(null, "Saliendo del sistema.");
                     break;
 
@@ -134,14 +123,15 @@ public class ClubRodeo {
             }
         } while (option != 9);
     }
-    
-    private static Partner getMemberById(Club club, String id) {
+
+    // Método auxiliar para buscar un socio por ID y validar su existencia
+    private static Partner findMemberById(Club club, String id) {
         for (Partner member : club.getMembers()) {
-            if(member.getId().equals(id)) {
+            if (member.getId().equals(id)) {
                 return member;
             }
         }
-        JOptionPane.showMessageDialog(null, "No se encontro un socio con esa cedula");
+        JOptionPane.showMessageDialog(null, "No se encontró un socio con esa cédula.");
         return null;
     }
 }
