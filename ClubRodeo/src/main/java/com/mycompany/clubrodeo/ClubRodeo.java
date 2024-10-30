@@ -32,7 +32,10 @@ public class ClubRodeo {
 
             switch (option) {
                 case 1:
-                    String id = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    String id;
+                    do {
+                        id = JOptionPane.showInputDialog("Ingrese la cédula del socio (solo números):");
+                    } while (!id.matches("\\d+")); // Verifica que la cédula contenga solo números
 
                     if (club.existMember(id)) {
                         JOptionPane.showMessageDialog(null, "Ya existe un socio con la cédula " + id + ". No se puede registrar nuevamente.");
@@ -83,11 +86,11 @@ public class ClubRodeo {
                     break;
                     
                 case 4:
-                    String memberId = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
+                    String memberIdForAuthorizedConsumption = JOptionPane.showInputDialog("Ingrese la cédula del socio:");
                     String authorizedId = JOptionPane.showInputDialog("Ingrese la cédula de la persona autorizada:");
-                    String concept = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
-                    double value = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
-                    club.addAuthorizedConsumption(memberId, authorizedId, concept, value);
+                    String conceptForAuthorizedConsumption = JOptionPane.showInputDialog("Ingrese el concepto del consumo:");
+                    double valueForAuthorizedConsumption = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el valor del consumo:"));
+                    club.addAuthorizedConsumption(memberIdForAuthorizedConsumption, authorizedId, conceptForAuthorizedConsumption, valueForAuthorizedConsumption);
                     break;
 
                 case 5: 
@@ -129,7 +132,7 @@ public class ClubRodeo {
                     JOptionPane.showMessageDialog(null, "Opción no válida.");
                     break;
             }
-        } while (option != 6);
+        } while (option != 9);
     }
     
     private static Partner getMemberById(Club club, String id) {

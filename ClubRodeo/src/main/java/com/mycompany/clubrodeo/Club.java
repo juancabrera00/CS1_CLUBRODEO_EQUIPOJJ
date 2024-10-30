@@ -103,14 +103,27 @@ public class Club {
     public boolean removeMember(String id) {
         for (Partner partner : members) {
             if (partner.getId().equals(id)) {
-                for (AuthorizedPerson authorized : partner.getPersonAuthorized()) {
-                    for (Invoice invoice : partner.getPendingInvoices()) {
-                        if (!invoice.isPaid()) {
-                            JOptionPane.showMessageDialog(null, "El socio tiene personas autorizadas con facturas pendientes. No se puede eliminar.");
-                            return false;
-                        }
+                // Validación: El socio no debe ser de tipo VIP
+                if ("VIP".equals(partner.getTypeSubscription())) {
+                    JOptionPane.showMessageDialog(null, "No se puede eliminar un socio VIP.");
+                    return false;
+                }
+
+                // Validación: El socio no debe tener más de una persona autorizada
+                if (partner.getPersonAuthorized().size() > 1) {
+                    JOptionPane.showMessageDialog(null, "No se puede eliminar un socio con más de una persona autorizada.");
+                    return false;
+                }
+
+                // Validación: El socio no debe tener facturas pendientes
+                for (Invoice invoice : partner.getPendingInvoices()) {
+                    if (!invoice.isPaid()) {
+                        JOptionPane.showMessageDialog(null, "El socio tiene facturas pendientes. No se puede eliminar.");
+                        return false;
                     }
                 }
+
+                // Si pasa todas las validaciones, eliminamos el socio
                 members.remove(partner);
                 JOptionPane.showMessageDialog(null, "Socio eliminado exitosamente.");
                 return true;
@@ -119,7 +132,7 @@ public class Club {
         JOptionPane.showMessageDialog(null, "No se encontró un socio con esa cédula.");
         return false;
     }
-    
+
     public boolean addAuthorizedConsumption(String memberId, String authorizedId, String concept, double value) {
         Partner member = findMemberById(memberId);
         if (member != null) {
@@ -129,7 +142,6 @@ public class Club {
             return false;
         }
     }
-
     
     public void showInformation() {
         if (members.isEmpty()) {

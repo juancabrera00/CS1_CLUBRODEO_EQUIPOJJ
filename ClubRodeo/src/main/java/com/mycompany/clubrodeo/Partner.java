@@ -17,6 +17,34 @@ public class Partner extends Person{
     private ArrayList<AuthorizedPerson> Peopleauthorized; // Lista de personas autorizadas por el socio
     private ArrayList<Invoice> pendingInvoices; // Lista de facturas pendientes
     
+    /**
+     * @return the funds
+     */
+    public double getFunds() {
+        return funds;
+    }
+
+    /**
+     * @param funds the funds to set
+     */
+    public void setFunds(double funds) {
+        this.funds = funds;
+    }
+
+    /**
+     * @return the typeSubscription
+     */
+    public String getTypeSubscription() {
+        return typeSubscription;
+    }
+
+    /**
+     * @param typeSubscription the typeSubscription to set
+     */
+    public void setTypeSubscription(String typeSubscription) {
+        this.typeSubscription = typeSubscription;
+    }
+    
     public Partner(String id, String name, String typeSubscription) {
         super(id,name);
         this.typeSubscription = typeSubscription;
@@ -41,7 +69,6 @@ public class Partner extends Person{
             return false;
         }
     }
-    
     
     public boolean payInvoice(Invoice invoice) { // Método para pagar una factura
         if (this.funds >= invoice.getValue() && !invoice.isPaid()) {
@@ -72,34 +99,6 @@ public class Partner extends Person{
         return pendingInvoices;
     }
     
-    /**
-     * @return the funds
-     */
-    public double getFunds() {
-        return funds;
-    }
-
-    /**
-     * @param funds the funds to set
-     */
-    public void setFunds(double funds) {
-        this.funds = funds;
-    }
-
-    /**
-     * @return the typeSubscription
-     */
-    public String getTypeSubscription() {
-        return typeSubscription;
-    }
-
-    /**
-     * @param typeSubscription the typeSubscription to set
-     */
-    public void setTypeSubscription(String typeSubscription) {
-        this.typeSubscription = typeSubscription;
-    }
-    
     public boolean addAuthorizedPerson(AuthorizedPerson person) {
         if(Peopleauthorized.size() < 10) {
             Peopleauthorized.add(person);
@@ -114,7 +113,6 @@ public class Partner extends Person{
     public ArrayList<AuthorizedPerson> getPersonAuthorized(){
         return Peopleauthorized;
     }
-    
     
     public boolean registerAuthorizedConsumption(String authorizedId, String concept, double value) {
         for (AuthorizedPerson person : Peopleauthorized) {
