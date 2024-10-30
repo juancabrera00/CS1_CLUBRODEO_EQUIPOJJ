@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
  *
  * @author jcabrera
  */
-public class Partner extends Person{
+public class Partner extends Person implements Payable, Consumable {
     private double funds;
     private String typeSubscription;
     private ArrayList<AuthorizedPerson> Peopleauthorized; // Lista de personas autorizadas por el socio
@@ -58,6 +58,7 @@ public class Partner extends Person{
         this.pendingInvoices = new ArrayList<>();
     }
     
+    @Override
     public boolean registerConsumption(String concept, double value) { // Método para registrar un consumo
         if (this.funds >= value) {
             Invoice invoice = new Invoice(concept, value, this.getName(), false);
@@ -70,6 +71,7 @@ public class Partner extends Person{
         }
     }
     
+    @Override
     public boolean payInvoice(Invoice invoice) { // Método para pagar una factura
         if (this.funds >= invoice.getValue() && !invoice.isPaid()) {
             this.funds -= invoice.getValue();
@@ -81,6 +83,10 @@ public class Partner extends Person{
             JOptionPane.showMessageDialog(null, "Fondos insuficientes para pagar la factura.");
             return false;
         }
+    }
+    
+    public void showInfo() {
+        JOptionPane.showMessageDialog(null, "Socio ID: " + getId() + "\nNombre: " + getName() + "\nTipo de Suscripción: " + typeSubscription + "\nFondos: $" + funds);
     }
     
     public boolean increaseFunds(double amount) {

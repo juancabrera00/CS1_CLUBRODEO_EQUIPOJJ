@@ -8,7 +8,7 @@ package com.mycompany.clubrodeo;
  *
  * @author jcabrera
  */
-public class Person {
+public abstract class Person {
     private String id;
     private String name;
 
@@ -44,4 +44,6 @@ public class Person {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public abstract void showInfo();
 }
